@@ -1,0 +1,10 @@
+# JetBrains
+.idea
+*.user
+/_ReSharper.Caches/
+riderModule.iml
+
+# Build files
+bin/
+obj/
+/packages/

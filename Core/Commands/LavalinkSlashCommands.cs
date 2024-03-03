@@ -1,7 +1,6 @@
 ﻿using Core.Extensions;
 using Core.Extensions.Interaction;
 using DSharpPlus;
-using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 
 namespace Core.Commands;
@@ -64,60 +63,14 @@ public class LavalinkSlashCommands : ApplicationCommandModule
         await context.SendChannelMessage($"Left {channel?.Name}!");
     }
 
-    // [SlashCommand("play", "Do a search on youtube for a specific track, and the most relevant result will be played.")]
-    // public async Task Play(InteractionContext ctx, [Option("query", "query")] string search)
-    // {
-    //     // Do a global search with the user input
-    //
-    //     //Important to check the voice state itself first, 
-    //     //as it may throw a NullReferenceException if they don't have a voice state.
-    //     if (ctx.Member?.VoiceState == null || ctx.Member.VoiceState.Channel == null)
-    //     {
-    //         await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-    //             new DiscordInteractionResponseBuilder().WithContent("You are not in a voice channel."));
-    //         return;
-    //     }
-    //
-    //     var lava = ctx.Client.GetLavalink();
-    //     var node = lava.ConnectedNodes.Values.First();
-    //     var conn = node.GetGuildConnection(ctx.Member.VoiceState.Guild);
-    //
-    //     if (conn == null)
-    //     {
-    //         await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-    //             new DiscordInteractionResponseBuilder().WithContent("Lavalink is not connected."));
-    //         return;
-    //     }
-    //
-    //     //We don't need to specify the search type here
-    //     //since it is YouTube by default.
-    //     var loadResult = await node.Rest.GetTracksAsync(search);
-    //
-    //     //If something went wrong on Lavalink's end                          
-    //     if (loadResult.LoadResultType == LavalinkLoadResultType.LoadFailed
-    //         //or it just couldn't find anything.
-    //         || loadResult.LoadResultType == LavalinkLoadResultType.NoMatches)
-    //     {
-    //         await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-    //             new DiscordInteractionResponseBuilder().WithContent($"Track search failed for {search}."));
-    //         return;
-    //     }
-    //
-    //     var track = loadResult.Tracks.First();
-    //
-    //     await conn.PlayAsync(track);
-    //
-    //     await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-    //         new DiscordInteractionResponseBuilder().WithContent($"Now playing {track.Title}!"));
-    // }
-
-    [SlashCommand("play", "Provide a url, and I'll play that track for you 👍")]
+    [SlashCommand("play", "Provide a youtube URL, or search for a specific video")]
     public static async Task Play(InteractionContext context,
-        [Option("url", "The url of the content you want to play")]
-        string url)
+        [Option("query", "The url of the content you want to play")]
+        string query)
     {
         // Validate user interaction
         var validInteraction = context.Validation()
+            .CheckUserInput()
             .CheckMemberVoiceState()
             .CheckLavalinkConnection()
             .CheckGuildConnection()
@@ -128,19 +81,12 @@ public class LavalinkSlashCommands : ApplicationCommandModule
             return;
         }
 
-        var lavalink = context.Client.GetLavalink();
-        var node = lavalink.GetConnectedNode();
-
-        // We don't need to specify the search type here
-        // since it is YouTube by default.
-        var loadResult = await node.Rest.GetTracksAsync(url);
-
-        // If something went wrong on Lavalink's end                          
-        if (loadResult.LoadResultType == LavalinkLoadResultType.LoadFailed
-            // or it just couldn't find anything.
-            || loadResult.LoadResultType == LavalinkLoadResultType.NoMatches)
+        // Get the media at the provided URL
+        context.TryGetLavaLink(out var lavalink);
+        var loadResult = await lavalink.GetLoadedResult(query);
+        if (loadResult == null)
         {
-            await context.SendChannelMessage($"Failed to play the URL: {url}.");
+            await context.SendChannelMessage($"Failed to play \"{query}\".");
             return;
         }
 
@@ -155,7 +101,7 @@ public class LavalinkSlashCommands : ApplicationCommandModule
         // Play track and send response
         var track = loadResult.Tracks.First();
         await connection.PlayAsync(track);
-        await context.SendChannelMessage($"Now playing {track.Title}!");
+        await context.SendChannelMessage($"Now playing \"{track.Title}\"!");
     }
 
     [SlashCommand("pause", "Pause the currently running track.")]

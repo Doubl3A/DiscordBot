@@ -37,4 +37,30 @@ public static class LavaLinkExtensions
 
         return connection;
     }
+
+    /// <summary>
+    ///     Get the loaded media with the provided <paramref name="media" />
+    /// </summary>
+    /// <param name="lavalink">The lavalink instance to load the media</param>
+    /// <param name="media">The media query</param>
+    /// <returns>The loaded media</returns>
+    /// <remarks>
+    ///     Works with both URLs and queries (as in search)
+    ///     Returns <b>Null</b> if an error occured while loading the media
+    /// </remarks>
+    public static async Task<LavalinkLoadResult?> GetLoadedResult(this LavalinkExtension lavalink, string media)
+    {
+        //We don't need to specify the search type here
+        //since it is YouTube by default.
+        var node = lavalink.GetConnectedNode();
+        var result = await node.Rest.GetTracksAsync(media);
+
+        //If something went wrong on Lavalink's end                          
+        if (result.LoadResultType == LavalinkLoadResultType.LoadFailed
+            // or it just couldn't find anything.
+            || result.LoadResultType == LavalinkLoadResultType.NoMatches)
+            result = null;
+
+        return result;
+    }
 }

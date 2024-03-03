@@ -12,6 +12,18 @@ public class InteractionValidationCollection
     private string _message = string.Empty;
     private bool _valid = true;
 
+    /// <summary>
+    ///     Create a new validator for the current <see cref="InteractionContext" />
+    /// </summary>
+    /// <param name="context">Teh context to validate</param>
+    /// <remarks>
+    ///     Initiate the validation of the <see cref="InteractionContext" /> with the Validation extension in
+    ///     <see cref="InteractionContextExtensions" />
+    ///     Customize the validator with the different validator addons (like <see cref="CheckChannel" />,
+    ///     <see cref="CheckLavalinkConnection" />, and more)
+    ///     Get the result of the validation by adding <see cref="Validate" /> at the end of the validator.
+    ///     Returns a <b>message</b> if the validation fails
+    /// </remarks>
     public InteractionValidationCollection(InteractionContext context)
     {
         _context = context;
@@ -21,7 +33,6 @@ public class InteractionValidationCollection
     ///     Get the results of the current interaction validation
     /// </summary>
     /// <param name="message">Error message provided if the validation fails</param>
-    /// <returns>The result of the validation</returns>
     public bool Validate(out string message)
     {
         // Return the results of this validation
@@ -33,7 +44,6 @@ public class InteractionValidationCollection
     ///     Check if the user channel is the right type for this interaction
     /// </summary>
     /// <param name="channelType">The required channel type</param>
-    /// <returns>The result of the <paramref name="channelType" /> and user channel type comparison</returns>
     public InteractionValidationCollection CheckChannel(ChannelType channelType)
     {
         if (SkipValidation())
@@ -53,7 +63,6 @@ public class InteractionValidationCollection
     /// <summary>
     ///     Checks for a lavalink connection
     /// </summary>
-    /// <returns>The result of the lavalink connection check</returns>
     public InteractionValidationCollection CheckLavalinkConnection()
     {
         if (SkipValidation())
@@ -75,7 +84,6 @@ public class InteractionValidationCollection
     /// <summary>
     ///     Check if the app is in a voice channel
     /// </summary>
-    /// <returns>The result of the app location check</returns>
     public InteractionValidationCollection CheckGuildConnection()
     {
         if (SkipValidation())
@@ -97,7 +105,6 @@ public class InteractionValidationCollection
     /// <summary>
     ///     Check that the interacting user is in a voice channel
     /// </summary>
-    /// <returns>The result of the user voice channel check</returns>
     public InteractionValidationCollection CheckMemberVoiceState()
     {
         if (SkipValidation())
@@ -117,7 +124,6 @@ public class InteractionValidationCollection
     ///     Check that a track is loaded into the player
     /// </summary>
     /// <param name="channel">The current voice channel</param>
-    /// <returns>The result of the track check</returns>
     public InteractionValidationCollection CheckForTrack(DiscordChannel? channel)
     {
         if (SkipValidation())
@@ -130,6 +136,30 @@ public class InteractionValidationCollection
         {
             _message = "There are no tracks loaded.";
             _valid = false;
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    ///     Validate the inputs the user sends inn
+    /// </summary>
+    public InteractionValidationCollection CheckUserInput()
+    {
+        if (SkipValidation())
+            // Previous method failed, skipping this validation
+            return this;
+
+        var options = _context.Interaction.Data.Options;
+        foreach (var option in options)
+        {
+            var valid = option.Value.ToString()?.Length > 0;
+            if (!valid)
+            {
+                _message = "An invalid query was provided";
+                _valid = false;
+                return this;
+            }
         }
 
         return this;

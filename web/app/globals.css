@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    /* Colors */
+    --color-white: white;
+    --color-black: black;
+    --color-background: rgb(44, 47, 51, 1);
+    --color-red: rgba(237, 66, 69, 1);
+    --color-fushcia: rgba(235, 69, 158, 1);
+    --color-yellow: rgba(254, 231, 92, 1);
+    --color-green: rgba(87, 242, 135, 1);
+    --color-blurple: rgba(88, 101, 242, 1);
+    --current-background: var(--color-blurple);
+
+    /* Screen sizes */
+    --screen-lg: 1024px;
+    --screen-md: 768px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --foreground-rgb: 255, 255, 255;
+        --background-start-rgb: 0, 0, 0;
+        --background-end-rgb: 0, 0, 0;
+    }
+}
+
+html {
+    height: 100vh;
+    width: 100vw;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+
+    transition: ease-in .4s;
+    background-color: var(--current-background, var(--color-blurple));
+    background-image: linear-gradient(120deg,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 1) 100%
+    );
+}
+
+.content-container {
+    width: 100%;
+    height: 100%;
+
+    grid-column-start: 3;
+    grid-column-end: 11;
+
+    @media (min-width: var(--screen-lg)) {
+        /*On mobile, span the entire width*/
+        grid-column-start: 1;
+        grid-column-end: 13;
+        padding: 0 1rem;
+    }
+}
+
+@layer utilities {
+
+}

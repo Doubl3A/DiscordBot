@@ -7,7 +7,7 @@ import Slogan from "@/components/molecules/Slogan";
 
 export default (props: IBanner) => {
     return (
-        <section className={"flex items-center justify-between"}>
+        <section className={"flex items-center justify-between max-md:flex-col-reverse"}>
             <div className={"grid gap-2.5 max-w-[650px]"}>
                 <Title title={props.title} type={TitleEnum.H1}/>
                 <Slogan text={props.slogan}/>

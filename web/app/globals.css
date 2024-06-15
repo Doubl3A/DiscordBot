@@ -70,7 +70,7 @@ a {
     --color-yellow: rgba(254, 231, 92, 1);
     --color-green: rgba(87, 242, 135, 1);
     --color-blurple: rgba(88, 101, 242, 1);
-    --current-background: var(--color-blurple);
+    --current-background: var(--color-black);
 
     /* Screen sizes */
     --screen-lg: 1024px;
@@ -98,7 +98,7 @@ body {
 }
 
 /* Shared content container*/
-/*Taken from Kevin Powel - A new approach to container and wrapper classes: https://www.youtube.com/watch?v=c13gpBrnGEw*/
+/* Taken from Kevin Powell - A new approach to container and wrapper classes: https://www.youtube.com/watch?v=c13gpBrnGEw */
 .content-grid {
     --padding-inline: 1rem;
     --content-max-width: 900px;
@@ -109,7 +109,6 @@ body {
     );
 
     display: grid;
-    row-gap: 4rem;
     grid-template-columns:
     [full-width-start] minmax(var(--padding-inline), 1fr)
     [breakout-start] minmax(0, var(--breakout-size))

@@ -13,7 +13,7 @@ export default () => {
         <section className={"grid gap-4"}>
             <Title className={""} {...content.title}/>
             <Paragraph {...content.intro}/>
-            <ul className={"list-decimal list-inside"}>
+            <ul className={"list-decimal list-inside grid gap-y-8"}>
                 {content.termsOfUse.map((terms: ITermsList) => <TermsList {...terms}/>)}
             </ul>
         </section>

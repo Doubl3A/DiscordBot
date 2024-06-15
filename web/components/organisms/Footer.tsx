@@ -3,8 +3,8 @@ import Link from "@/components/atoms/Link";
 
 export default (props: IFooter) => {
     return (
-        <section className={"w-full flex justify-center h-[100px]"}>
+        <footer className={"w-full flex justify-center h-[100px]"}>
             <Link {...props.link}/>
-        </section>
+        </footer>
     );
 }

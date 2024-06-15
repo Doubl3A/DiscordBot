@@ -18,16 +18,16 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: Readonly<{ children: React.ReactNode; }>) {
     return (
         <html lang="en">
-        <body className={notoSans.className}>
-        <main className="content-grid gap-8 min-h-screen">
-            <Header/>
+        <body className={notoSans.className + " content-grid gap-y-16 min-h-screen"}>
+        <Header/>
+        <main id="main-content" className="content-grid gap-y-16">
             <Template>
                 {children}
             </Template>
-            <Footer {...sharedFooter}/>
-            <SpeedInsights/>
-            <Analytics/>
         </main>
+        <Footer {...sharedFooter}/>
+        <SpeedInsights/>
+        <Analytics/>
         </body>
         </html>
     );

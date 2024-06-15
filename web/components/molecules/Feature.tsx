@@ -16,7 +16,7 @@ export default (props: IFeature) => {
                         <List {...props.featureList}/>
                         <Paragraph {...props.text}/>
                     </div>
-                    <div className={"w-40 h-40"}>
+                    <div className={"w-40 h-40 max-md:hidden"}>
                         <Icon {...props.icon}/>
                     </div>
                 </div>

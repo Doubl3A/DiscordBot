@@ -4,7 +4,6 @@ import {useEffect} from "react";
 
 /**
  * Set the page background color
- * @constructor
  */
 export default () => {
 
@@ -16,6 +15,12 @@ export default () => {
                 break;
             case "/terms-of-use":
                 color = Color.Green
+                break;
+            case "/funding":
+                color = Color.Yellow
+                break;
+            case "/stats":
+                color = Color.Fushcia
                 break;
             default:
                 color = Color.Red

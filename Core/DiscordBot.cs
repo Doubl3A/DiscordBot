@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Lavalink;
@@ -100,7 +100,7 @@ public class DiscordBot
 
         // Add the lavalink connection
         if (_lavalinkConfiguration != null && _lavalinkExtension != null)
-            // Make sure this is after Discord.ConnectAsync().
+            // Make sure this is after ConnectAsync
             await _lavalinkExtension.ConnectAsync(_lavalinkConfiguration);
 
         await Task.Delay(-1);
